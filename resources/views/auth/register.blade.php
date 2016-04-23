@@ -1,11 +1,11 @@
-@extends('layouts.app')
+@extends('layouts.welcome')
 
 @section('content')
-<div class="container">
+<div class="container animated flipInX ">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Register</div>
+            <div class="panel panel-warning">
+                <div class="panel-heading">Register  -  <a href="/login" style="font-size: 13px; color: darkred">You already have an account ?</a></div>
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
                         {!! csrf_field() !!}
@@ -68,7 +68,7 @@
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-warning" style="background-color: orangered">
                                     <i class="fa fa-btn fa-user"></i>Register
                                 </button>
                             </div>
