@@ -12,7 +12,7 @@
 */
 
 
-Route::get('/', function () {return view('welcome');});
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -26,6 +26,7 @@ Route::get('/', function () {return view('welcome');});
 
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
+    Route::get('/', function () {if (Auth::check()){return view('map');} else{return view('welcome');}});
     Route::get('/auth', function () {return redirect("/map");});
     Route::get('auth/facebook', 'Auth\AuthFacebookController@redirectToProvider');
     Route::get('auth/facebook/callback', 'Auth\AuthFacebookController@handleProviderCallback');
