@@ -10,8 +10,6 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-
-
 Route::get('/', function () {return view('welcome');});
 /*
 |--------------------------------------------------------------------------
@@ -35,4 +33,10 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/settings', 'UserController@getSettings');
 
     Route::get('/map', 'HomeController@index');
+    Route::post('map/add_point', 'HomeController@add_point');
+
+    Route::get('/chatroom', 'ChatController@index');
+    Route::post('chatroom/push', 'ChatController@push');
+    Route::post('chatroom/report', 'ChatController@report');
+    Route::get('chatroom/push', 'ChatController@push');
 });

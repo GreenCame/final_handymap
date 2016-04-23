@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use Auth;
+use Input;
 
 class HomeController extends Controller
 {
@@ -21,5 +23,21 @@ class HomeController extends Controller
     public function index()
     {
         return view('map');
+    }
+
+    public function add_point()
+    {
+       
+        $creater= Auth::user()->pseudo;
+        $lng = Input::get('lng');
+        $lat = Input::get('lat');
+        $lat = Input::get('desc');
+        $point = new Point();
+        $point->longitude = $lng;
+        $point->latitude = $lat;
+        $point->description = $desc;
+
+        return response()->json(['creater_name' => $creater]);
+
     }
 }

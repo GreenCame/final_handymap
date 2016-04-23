@@ -17,7 +17,9 @@
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
 
     <link rel="stylesheet" href="{{URL::asset('assets/css/base.css')}}">
-    @yield('link')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    @yield('links')
 </head>
 <body id="app-layout">
 <nav class="navbar navbar-default navbar-static-top">
@@ -43,11 +45,11 @@
             <!-- Left Side Of Navbar -->
             @if(Auth::check())
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/map') }}">Map</a></li>
+                    <li><a href="{{ url('/addpoint') }}"><b class="addAPoint">Add a point</b></a></li>
                 </ul>
-            @endif
+                @endif
 
-                <!-- Right Side Of Navbar -->
+                        <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Authentication Links -->
                     @if (Auth::guest())
@@ -57,16 +59,31 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                aria-expanded="false">
-                                <img height="25" class="avatar" style="margin-right: 10px" src="{{URL::asset('assets/images/avatars/'.Auth::user()->avatar)}}">
+                                <img height="25" class="avatar" style="margin-right: 10px"
+                                     src="{{URL::asset('assets/images/avatars/'.Auth::user()->avatar)}}">
                                 {{ Auth::user()->pseudo }} <span class="caret"></span>
                             </a>
-
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ url('/points') }}"><i class="fa fa-btn fa-flag"></i> Contribution</a>
+                                <li><a href="{{ url('/contribution/'.Auth::user()->pseudo) }}"><i class="fa fa-btn fa-flag"></i>
+                                        Contribution</a>
                                 </li>
-                                <li><a href="{{ url('/profile') }}"><i class="fa fa-btn fa-cog"></i> profile</a></li>
-                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i> Logout</a></li>
+                                @if (Auth::user()->isAdmin)
+                                    <li><a href="{{ url('/console') }}"><i class="fa fa-btn fa-dashboard"></i>
+                                            Console</a>
+                                    </li>
+                                @endif
+                                @if (!Auth::user()->isAdmin)
+                                    <li><a href="{{ url('/feedback') }}"><i class="fa fa-btn fa-check"></i>
+                                            Feedback</a>
+                                    </li>
+                                @endif
+
+                                <li><a href="{{ url('/profile') }}"><i class="fa fa-btn fa-cog"></i> Profile</a>
+                                </li>
+                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i> Logout</a>
+                                </li>
                             </ul>
+
                         </li>
                     @endif
                 </ul>
