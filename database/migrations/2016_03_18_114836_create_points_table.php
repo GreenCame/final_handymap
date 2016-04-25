@@ -16,8 +16,9 @@ class CreatePointsTable extends Migration
             $table->increments('id');
             $table->integer('rateValue');
             $table->string('description');
-            $table->string('longitude');
-            $table->string('latitude');
+            $table->double('longitude');
+            $table->double('latitude');
+            $table->integer('type');
             $table->integer('user_id')->unsigned();
             $table->boolean('isValidate');
             $table->foreign('user_id')

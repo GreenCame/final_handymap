@@ -50,7 +50,7 @@
                     </div>
                     <div v-else>
                         <div style="text-align: center;">
-                            Loading...
+                            No points found...
                         </div>
                     </div>
                 </div>

@@ -7,6 +7,7 @@ use App\User;
 use App\Feedback;
 use App\Point;
 use Illuminate\Support\Facades\DB;
+use App;
 
 class AdminController extends Controller
 {
@@ -91,7 +92,7 @@ class AdminController extends Controller
     }
     public function getWaitingPoints()
     {
-        return DB::table("points")
+        $points = DB::table("points")
             ->leftjoin('users', 'points.user_id', '=', 'users.id')
             ->leftjoin('confirmations', 'points.id', '=', 'confirmations.point_id')
             ->select('points.*', 'pseudo AS writer',  DB::raw('ifnull(SUM(case confirmations.isConfirm when 1 then 1 else -1 end),0) AS confirmed'))
@@ -99,6 +100,11 @@ class AdminController extends Controller
             ->groupBy('points.id')
             ->orderBy('created_at', 'desc')
             ->get();
+        for ($i = 0; $i < count($points); $i++) {
+
+            $points[$i]->typePicture =  PointController::getTypeToPicture($points[$i]->type);
+        }
+        return $points;
     }
 
     public function putPoint($id)

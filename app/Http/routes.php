@@ -32,7 +32,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('auth/facebook/callback', 'Auth\AuthFacebookController@handleProviderCallback');
 
     Route::get('/profile', 'UserController@getProfile')->middleware('auth');
-    Route::get('/contribution/{pseudo}', 'UserController@showContribution')->middleware('auth');
+    Route::get('/contribution/{pseudo}', 'PointController@showContribution')->middleware('auth');
     Route::put('/settings', 'UserController@postSettings')->middleware('auth');
     Route::get('/settings', 'UserController@getSettings')->middleware('auth');
     Route::get('/settings/{id}', 'AdminController@getSettingsUser')->middleware('admin');
@@ -54,8 +54,9 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/api/feedbacks/delete/{id}','AdminController@deleteFeedback')->middleware('admin');
     //Point api
     Route::get('/api/waiting_points/get','AdminController@getWaitingPoints')->middleware('admin');
-    Route::get('/api/points/get','UserController@getPoints')->middleware('auth');
-    Route::get('/api/points/get/{user}','UserController@getContribution')->middleware('auth');
+    Route::get('/api/points/get','PointController@getPoints')->middleware('auth');
+    Route::get('/api/points/get/type/{type}','PointController@getTypeToPicture')->middleware('auth');
+    Route::get('/api/points/get/{user}','PointController@getContribution')->middleware('auth');
     Route::get('/api/points/put/{id}','AdminController@putPoint')->middleware('admin');
-    Route::get('/api/points/delete/{id}','UserController@deletePoint')->middleware('auth');
+    Route::get('/api/points/delete/{id}','PointController@deletePoint')->middleware('auth');
 });
