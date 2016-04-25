@@ -149,6 +149,8 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         Cviebrock\ImageValidator\ImageValidatorServiceProvider::class,
+        Vinkla\Pusher\PusherServiceProvider::class,
+
 
 
 
@@ -206,7 +208,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        'Input' => Illuminate\Support\Facades\Input::class,
+        'Pusherer' => Vinkla\Pusher\Facades\Pusher::class
     ],
 
 ];

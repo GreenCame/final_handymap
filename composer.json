@@ -8,7 +8,9 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "laravel/socialite": "^2.0",
-        "cviebrock/image-validator": "^2.0"
+        "cviebrock/image-validator": "^2.0",
+        "pusher/pusher-php-server": "^2.3",
+        "vinkla/pusher": "^2.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
