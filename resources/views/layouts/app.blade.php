@@ -11,6 +11,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet'
           type='text/css'>
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" type="CSS/Images/x-icon" href="/assets/images/markers/logo.png" />
 
     <!-- Styles -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
@@ -34,27 +35,21 @@
             </button>
 
             <!-- Branding Image -->
-            <a class="navbar-brand" href="{{ url('/') }}">
-                HandyMap
+            <a class="navbar-brand" href="{{ url('/') }}" style="color:black">
+                <span class=" glyphicon glyphicon-map-marker" style="color:#EC8A0A"></span> HandyMap
             </a>
         </div>
 
         <div class="collapse navbar-collapse" id="app-navbar-collapse">
-            <!-- Left Side Of Navbar -->
-            @if(Auth::check())
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/addpoint') }}"><b class="addAPoint">Add a point</b></a></li>
-                </ul>
-                @endif
 
-                        <!-- Right Side Of Navbar -->
+               <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Authentication Links -->
                     @if (Auth::guest())
                         <li><a href="{{ url('/login') }}">Login</a></li>
                         <li><a href="{{ url('/register') }}">Register</a></li>
                     @else
-                        <li class="dropdown">
+                        <li class="dropdown" style="color:#EC8A0A">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                aria-expanded="false">
                                 <img height="25" class="avatar" style="margin-right: 10px"

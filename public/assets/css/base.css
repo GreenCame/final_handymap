@@ -30,3 +30,19 @@ body {
 {
     background-color: lightgrey;
 }
+
+.navbar-default {
+    background-color: #f8f8f8;
+    border-color: #EFA91D;
+}
+.typePointPicture{
+    position: relative;
+}
+.typePointPicture img{
+    position: absolute;
+    height: 70px;
+    width: auto;
+    border-radius: 50%;
+    margin-left: -80px;
+    margin-top: 8px;
+}

@@ -277,7 +277,7 @@
                 </template>
 
                 <template id="pointConfirm-template">
-                    <td>@{{point.writer}}</td>
+                    <td class="typePointPicture"><img v-bind:src="point.typePicture">@{{point.writer}}</td>
                     <td>@{{point.rateValue}}<span style="color: grey">/5</span></td>
                     <td>@{{point.longitude}}</td>
                     <td>@{{point.latitude}}</td>
