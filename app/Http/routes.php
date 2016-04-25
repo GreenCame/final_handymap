@@ -54,6 +54,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/api/feedbacks/delete/{id}','AdminController@deleteFeedback')->middleware('admin');
     //Point api
     Route::get('/api/waiting_points/get','AdminController@getWaitingPoints')->middleware('admin');
+    Route::get('/api/points/add','PointController@addPoint')->middleware('auth');
     Route::get('/api/points/get','PointController@getPoints')->middleware('auth');
     Route::get('/api/points/get/type/{type}','PointController@getTypeToPicture')->middleware('auth');
     Route::get('/api/points/get/{user}','PointController@getContribution')->middleware('auth');
