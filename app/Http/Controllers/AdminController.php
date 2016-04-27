@@ -95,21 +95,34 @@ class AdminController extends Controller
         $points = DB::table("points")
             ->leftjoin('users', 'points.user_id', '=', 'users.id')
             ->leftjoin('confirmations', 'points.id', '=', 'confirmations.point_id')
-            ->select('points.*', 'pseudo AS writer',  DB::raw('ifnull(SUM(case confirmations.isConfirm when 1 then 1 else -1 end),0) AS confirmed'))
+            ->leftjoin('types', 'types.id', '=', 'points.type_id')
+            ->select('points.*', 'pseudo AS writer', 'types.picture AS typePicture',  DB::raw('ifnull(SUM(case confirmations.isConfirm when 1 then 1 else -1 end),0) AS confirmed'))
             ->where("isValidate", "=", 0)
             ->groupBy('points.id')
             ->orderBy('created_at', 'desc')
             ->get();
         for ($i = 0; $i < count($points); $i++) {
-
-            $points[$i]->typePicture =  PointController::getTypeToPicture($points[$i]->type);
+            $points[$i]->typePicture = "/assets/images/markers/".$points[$i]->typePicture;
         }
         return $points;
     }
 
     public function putPoint($id)
     {
-        Point::find($id)->update(['isValidate' => true]);
+        $isValidate = false;
+        if($_GET['isValidate']=="true"){
+            $isValidate = true;
+        }
+        else if($_GET['isValidate']=="false"){
+            $isValidate = false;
+        }
+        Point::find($id)->update([
+                'description' => $_GET['description'],
+                'isValidate' => $isValidate,
+                'latitude' => $_GET['latitude'],
+                'rateValue' => $_GET['rateValue'],
+                'longitude' => $_GET['longitude']
+            ]);
     }
 
 }

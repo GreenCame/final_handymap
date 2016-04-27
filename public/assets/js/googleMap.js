@@ -125,6 +125,7 @@ function initMap() {
 	var content= "Going uphill";
 	var title = "Uphill";
 	
+	
 	$(".icon").click(function(){
 		var source = $(this).attr('src');
 		content = $(this).attr('alt');
@@ -147,26 +148,57 @@ function initMap() {
 		//Content structure of info Window for the Markers
 		//next line is the get position
 		var post = event.latLng;
+		var lat = post.lat();
+		var lng = post.lng();
+		var rateValues;
 		
+		var image_array = ["bus.png","construct.png","deadend.png","dog.png","down.png","drunk.png",
+			"elevator.png","fire.png","help.png","hospital.png","narrow.png","parking.png",
+		"police.png","rock.png","shit.png","slippery.png","stair.png","up.png"];
 		
 		var contentString = $('<div class="marker-info-win">'+
 		'<div class="marker-inner-win"><span class="info-content">'+
 		'<div style="text-align: center;">' + title + '</div>' +
-		'<br>' + post +
+		'<br>'+
 		'<p id ="text" style="text-align:center">Description:</p>' +
-		'<input style="width: 150px" type="text" name="descirption" class="input" value="Write your description">' + 
+		'<input style="width: 150px" type="text" name="description" class="input" value="Write your description">' + 
 		'<br>' +
-		'<input type="button" name="submit" value="Submit" class="submit">' + '<br>' +
+		'<input type="button" name="submit" data-lng="'+lng+'" data-lat="'+lat+'" value="Submit" class="submit">' + '<br>' +
 		'<br /><button style="width: 100% ;margin-left:auto; margin-right:auto;" name="remove-marker" class="remove-marker" title="Remove Marker">Remove Marker</button></div></div>');
 		//Save value of input text and show on infoWindow, also delete both input field and submit button
 		var Submit 	= contentString.find('input.submit')[0];
 		google.maps.event.addDomListener(Submit, "click", function(event) {
+			var $this = $(this);
+			var latitude = $this.data('lat');
+			var longitude = $this.data('lng');
+			var desc_val = $this.parent().find('[name="description"]').val();
+			var tarr = image.split('/') ;
+			var file = tarr[tarr.length-1];
+			var image_type = image_array.indexOf(file);
+			console.log(image_type);
 			
-			contentString.find('br').remove();
-			var x = contentString.find('input.input').val();
-			contentString.find('input.submit').remove();
-			contentString.find('input.input').remove();
-			contentString.find('#text').append('<br>' + x + '<br>' + "Written by: " + "Getuserhere");
+			 $.ajaxSetup({
+				headers:
+				{ 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+			});
+
+			$.ajax({
+		        url: '/api/points/add',
+		        type: 'POST',    
+				dataType:JSON,
+		        data: {longitude:lng,latitude:lat,'description':desc_val,rateValue:rateValues,type:image_type},
+		        success: function(data){
+		        contentString.find('br').remove();
+				var x = contentString.find('input.input').val();
+				contentString.find('input.submit').remove();
+				contentString.find('input.input').remove();
+				contentString.find('#text').append('<br>' + x + '<br>');
+		        },
+		        error: function(e){
+		          console.log(e);
+		        }
+		});
+			
 		});
 		//Create an infoWindow
 		var infowindow = new google.maps.InfoWindow();

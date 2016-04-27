@@ -153,7 +153,7 @@
                     <div class="panel panel-success"  v-if="points.length!=0">
                         <div class="panel-heading">
                             <span class="glyphicon glyphicon-lg glyphicon-map-marker"></span>
-                            Points to confirm (@{{points.length}})
+                            Points (@{{points.length}})
                         </div>
 
                         <table class="table">
@@ -182,8 +182,8 @@
                 </div>
 
                 <template id="user-template">
-                    <td v-if="isBan">@{{user.pseudo}}<b style="color:darkred"><span style="color:darkred" class="glyphicon glyphicon-ban-circle"></span> is ban</b></td>
-                    <td v-else>@{{user.pseudo}}</td>
+                    <td v-if="isBan"><a href="/contribution/@{{user.pseudo}}">@{{user.pseudo}}</a><b style="color:darkred"><span style="color:darkred" class="glyphicon glyphicon-ban-circle"></span> is ban</b></td>
+                    <td v-else><a href="/contribution/@{{user.pseudo}}">@{{user.pseudo}}</a></td>
                     <td>
                         <span v-on:click="clicked"
                               v-show="!isEditMode"
@@ -277,16 +277,66 @@
                 </template>
 
                 <template id="pointConfirm-template">
-                    <td class="typePointPicture"><img v-bind:src="point.typePicture">@{{point.writer}}</td>
-                    <td>@{{point.rateValue}}<span style="color: grey">/5</span></td>
-                    <td>@{{point.longitude}}</td>
-                    <td>@{{point.latitude}}</td>
-                    <td>@{{point.description}}</td>
+                    <td class="typePointPicture"><img v-bind:src="point.typePicture"><a href="/contribution/@{{point.writer}}">@{{point.writer}}</a></td>
+                    <td>
+                        <span v-on:click="clicked"
+                              v-show="!isEditMode"
+                                >
+                            @{{point.rateValue}}<span style="color: grey">/5</span>
+                        </span>
+                        <span v-show="isEditMode">
+                            <input type="text"
+                                   size="7"
+                                   v-model="point.rateValue"
+                                   v-on:keyup.enter="clicked"
+                                    >
+                        </span>
+                    </td>
+                    <td>
+                        <span v-on:click="clicked"
+                              v-show="!isEditMode"
+                                >
+                            @{{point.longitude}}
+                        </span>
+                        <span v-show="isEditMode">
+                            <input type="text"
+                                   size="7"
+                                   v-model="point.longitude"
+                                   v-on:keyup.enter="clicked"
+                                    >
+                        </span>
+                    </td>
+                    <td>
+                        <span v-on:click="clicked"
+                              v-show="!isEditMode"
+                                >
+                            @{{point.latitude}}
+                        </span>
+                        <span v-show="isEditMode">
+                            <input type="text"
+                                   size="7"
+                                   v-model="point.latitude"
+                                   v-on:keyup.enter="clicked"
+                                    >
+                        </span>
+                    </td>
+                    <td>
+                        <span v-on:click="clicked"
+                               v-show="!isEditMode"
+                                >
+                            @{{point.description}}
+                        </span>
+                        <span v-show="isEditMode">
+                            <textarea  v-model="point.description"></textarea>
+                        </span>
+                    </td>
                     <td>
                         <span style="color:forestgreen" v-if="point.confirmed > 5">+@{{point.confirmed}}</span>
                         <span style="color:darkred" v-if="point.confirmed < -5">@{{point.confirmed}}</span>
-                        <span v-if="point.confirmed >= -5 && point.confirmed <= 5">@{{point.confirmed}}</span>
                         <span style="color:darkslategrey" v-if="point.confirmed == 0">-</span>
+                        <span style="color:darkslategrey" v-if="point.confirmed == -1">-</span>
+                        <span v-if="point.confirmed >= -5 && point.confirmed < -1">@{{point.confirmed}}</span>
+                        <span v-if="point.confirmed >= 1 && point.confirmed <= 5">+@{{point.confirmed}}</span>
                     </td>
                     <td><button class="btn btn-info btn-sm" v-on:click="/map/@{{ point.latitude }}/@{{ point.longitude }}" >  <span class="glyphicon glyphicon-eye-open"></span>   show it </button><br />
                         <button class="btn btn-success btn-sm" v-on:click="confirmPoint">  <span class="glyphicon glyphicon-ok"></span> validate  </button><br />
@@ -295,20 +345,70 @@
                 </template>
 
                 <template id="validatePoint-template">
-                    <td class="typePointPicture"><img v-bind:src="point.typePicture">@{{point.writer}}</td>
-                    <td>@{{point.rateValue}}<span style="color: grey">/5</span></td>
-                    <td>@{{point.longitude}}</td>
-                    <td>@{{point.latitude}}</td>
-                    <td>@{{point.description}}</td>
+                    <td class="typePointPicture"><img v-bind:src="point.typePicture"><a href="/contribution/@{{point.writer}}">@{{point.writer}}</a></td>
+                    <td>
+                        <span v-on:click="clicked"
+                              v-show="!isEditMode"
+                                >
+                            @{{point.rateValue}}<span style="color: grey">/5</span>
+                        </span>
+                        <span v-show="isEditMode">
+                            <input type="text"
+                                   size="7"
+                                   v-model="point.rateValue"
+                                   v-on:keyup.enter="clicked"
+                                    >
+                        </span>
+                    </td>
+                    <td>
+                        <span v-on:click="clicked"
+                              v-show="!isEditMode"
+                                >
+                            @{{point.longitude}}
+                        </span>
+                        <span v-show="isEditMode">
+                            <input type="text"
+                                   size="7"
+                                   v-model="point.longitude"
+                                   v-on:keyup.enter="clicked"
+                                    >
+                        </span>
+                    </td>
+                    <td>
+                        <span v-on:click="clicked"
+                              v-show="!isEditMode"
+                                >
+                            @{{point.latitude}}
+                        </span>
+                        <span v-show="isEditMode">
+                            <input type="text"
+                                   size="7"
+                                   v-model="point.latitude"
+                                   v-on:keyup.enter="clicked"
+                                    >
+                        </span>
+                    </td>
+                    <td>
+                        <span v-on:click="clicked"
+                              v-show="!isEditMode"
+                                >
+                            @{{point.description}}
+                        </span>
+                        <span v-show="isEditMode">
+                            <textarea  v-model="point.description"></textarea>
+                        </span>
+                    </td>
                     <td>
                         <span style="color:forestgreen" v-if="point.confirmed > 5">+@{{point.confirmed}}</span>
                         <span style="color:darkred" v-if="point.confirmed < -5">@{{point.confirmed}}</span>
-                        <span v-if="point.confirmed >= -5 && point.confirmed <= 5">@{{point.confirmed}}</span>
                         <span style="color:darkslategrey" v-if="point.confirmed == 0">-</span>
+                        <span style="color:darkslategrey" v-if="point.confirmed == -1">-</span>
+                        <span v-if="point.confirmed >= -5 && point.confirmed < -1">@{{point.confirmed}}</span>
+                        <span v-if="point.confirmed >= 1 && point.confirmed <= 5">+@{{point.confirmed}}</span>
                     </td>
                     <td><button class="btn btn-info btn-sm" >  <span class="glyphicon glyphicon-eye-open"></span>   show it </button><br />
-                        <button class="btn btn-warning btn-sm" onClick="unValidatePoint">  <span class="glyphicon glyphicon-erase"></span> Unvalidate</button><br />
-                        <button class="btn btn-danger btn-sm btn-remove"  onClick="deletePoint"> <span class="glyphicon glyphicon-remove"></span> remove</button>
+                        <button class="btn btn-warning btn-sm" v-on:click="unValidatePoint">  <span class="glyphicon glyphicon-erase"></span> Unvalidate</button><br />
+                        <button class="btn btn-danger btn-sm btn-remove"   v-on:click="removePoint"> <span class="glyphicon glyphicon-remove"></span> remove</button>
                     </td>
                 </template>
             </div>
