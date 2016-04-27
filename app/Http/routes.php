@@ -54,11 +54,10 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/api/feedbacks/delete/{id}','AdminController@deleteFeedback')->middleware('admin');
     //Point api
     Route::get('/api/waiting_points/get','AdminController@getWaitingPoints')->middleware('admin');
-    Route::get('/api/points/add','PointController@addPoint')->middleware('auth');
+    Route::post('/api/points/add','PointController@addPoints')->middleware('auth');
     Route::get('/api/points/get','PointController@getPoints')->middleware('auth');
-    Route::get('/api/points/get/type/{type}','PointController@getTypeToPicture')->middleware('auth');
     Route::get('/api/points/get/{user}','PointController@getContribution')->middleware('auth');
-    Route::get('/api/points/put/{id}','AdminController@putPoint')->middleware('admin');
+    Route::get('/api/point/put/{id}','AdminController@putPoint')->middleware('admin');
     Route::get('/api/points/delete/{id}','PointController@deletePoint')->middleware('auth');
     //Chat api
     Route::get('/chatroom', 'ChatController@index');

@@ -18,12 +18,15 @@ class CreatePointsTable extends Migration
             $table->string('description');
             $table->double('longitude');
             $table->double('latitude');
-            $table->integer('type');
+            $table->integer('type_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->boolean('isValidate');
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users');
+            $table->foreign('type_id')
+                ->references('id')
+                ->on('types');
             $table->timestamps();
         });
     }
