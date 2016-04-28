@@ -327,7 +327,7 @@
                             @{{point.description}}
                         </span>
                         <span v-show="isEditMode">
-                            <textarea  v-model="point.description"></textarea>
+                            <textarea ROWS="5" cols="40" v-model="point.description"></textarea>
                         </span>
                     </td>
                     <td>
@@ -338,9 +338,16 @@
                         <span v-if="point.confirmed >= -5 && point.confirmed < -1">@{{point.confirmed}}</span>
                         <span v-if="point.confirmed >= 1 && point.confirmed <= 5">+@{{point.confirmed}}</span>
                     </td>
-                    <td><button class="btn btn-info btn-sm" v-on:click="/map/@{{ point.latitude }}/@{{ point.longitude }}" >  <span class="glyphicon glyphicon-eye-open"></span>   show it </button><br />
-                        <button class="btn btn-success btn-sm" v-on:click="confirmPoint">  <span class="glyphicon glyphicon-ok"></span> validate  </button><br />
-                        <button class="btn btn-danger btn-sm btn-remove"  v-on:click="removePoint"> <span class="glyphicon glyphicon-remove"></span> remove</button>
+                    <td>
+                        <button class="btn btn-info btn-sm " title="Modify/Save"
+                                v-on:click="clicked"
+                                >
+                            <span class="glyphicon glyphicon-floppy-disk"  v-if="isEditMode"></span>
+                            <span class="glyphicon glyphicon-pencil" v-if="!isEditMode"></span>
+                        </button>
+                        <button class="btn btn-disable btn-sm" title="Show" v-on:click="/map/@{{ point.latitude }}/@{{ point.longitude }}" >  <span class="glyphicon glyphicon-eye-open"></span></button><br />
+                        <button class="btn btn-success btn-sm" title="Validate" v-on:click="confirmPoint">  <span class="glyphicon glyphicon-ok"></span></button><br />
+                        <button class="btn btn-danger btn-sm btn-remove" title="Remove" v-on:click="removePoint"> <span class="glyphicon glyphicon-remove"></span></button>
                     </td>
                 </template>
 
@@ -395,7 +402,7 @@
                             @{{point.description}}
                         </span>
                         <span v-show="isEditMode">
-                            <textarea  v-model="point.description"></textarea>
+                            <textarea ROWS="5" cols="40" v-model="point.description"></textarea>
                         </span>
                     </td>
                     <td>
@@ -406,9 +413,16 @@
                         <span v-if="point.confirmed >= -5 && point.confirmed < -1">@{{point.confirmed}}</span>
                         <span v-if="point.confirmed >= 1 && point.confirmed <= 5">+@{{point.confirmed}}</span>
                     </td>
-                    <td><button class="btn btn-info btn-sm" >  <span class="glyphicon glyphicon-eye-open"></span>   show it </button><br />
-                        <button class="btn btn-warning btn-sm" v-on:click="unValidatePoint">  <span class="glyphicon glyphicon-erase"></span> Unvalidate</button><br />
-                        <button class="btn btn-danger btn-sm btn-remove"   v-on:click="removePoint"> <span class="glyphicon glyphicon-remove"></span> remove</button>
+                    <td>
+                        <button class="btn btn-info btn-sm"  title="Modify/Save"
+                                v-on:click="clicked"
+                                >
+                            <span class="glyphicon glyphicon-floppy-disk" v-if="isEditMode"></span>
+                            <span class="glyphicon glyphicon-pencil" v-if="!isEditMode"></span>
+                        </button>
+                        <button class="btn btn-disable btn-sm"  title="show" >  <span class="glyphicon glyphicon-eye-open"></span> </button>
+                        <button class="btn btn-warning btn-sm"  title="Unvalidate" v-on:click="unValidatePoint">  <span class="glyphicon glyphicon-erase"></span></button><br />
+                        <button class="btn btn-danger btn-sm btn-remove"  title="remove"  v-on:click="removePoint"> <span class="glyphicon glyphicon-remove"></span></button>
                     </td>
                 </template>
             </div>
