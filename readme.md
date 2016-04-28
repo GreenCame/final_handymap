@@ -48,8 +48,9 @@ in the file `C:\wamp\apps\phpmyadmin4.1.14\config.inc.php` change that:
 command:
     cd C:\wamp\frameworks\laravel\handymap
 then
-    php artisan make:migration v1
-    php artisan migrate
+    php artisan migrate --seed
+
+So by default there lot of fake data in database and also an admin with login:admin@gmail.com and password:Password and also an User with  login:user@gmail.com and password:Password
 
 
 
