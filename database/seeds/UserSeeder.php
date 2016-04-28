@@ -14,6 +14,7 @@ class UserSeeder extends Seeder
         //Admin
         factory(App\User::class, "admin")->create();
         //user
+        factory(App\User::class, "user")->create();
         factory(App\User::class, 50)->create();
     }
 }

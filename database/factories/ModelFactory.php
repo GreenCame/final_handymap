@@ -40,6 +40,20 @@ $factory->defineAs(App\User::class, 'admin', function (Faker\Generator $faker) {
         'password' => bcrypt("Password")
     ];
 });
+$factory->defineAs(App\User::class, 'user', function (Faker\Generator $faker) {
+    return [
+        'pseudo' => "User",
+        'email' => "user@gmail.com",
+        'firstname' => $faker->firstName,
+        'lastname' => $faker->lastName,
+        'warnings' => 0,
+        'isVoice' => true,
+        'isAdmin' => true,
+        'isColor' => true,
+        'isBlocked' => false,
+        'password' => bcrypt("Password")
+    ];
+});
 
 $factory->define(App\Feedback::class, function (Faker\Generator $faker) {
     return [
@@ -69,8 +83,8 @@ $factory->define(App\Point::class, function (Faker\Generator $faker) {
         'rateValue' => $faker->randomElement(array(1,2,3,4,5)),
         'description' => $faker->paragraph,
         'type_id' => $faker->randomElement(array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18)),
-        'longitude' => $faker->randomFloat(9,1,900),
-        'latitude' => $faker->randomFloat(9,1,900),
+        'longitude' => $faker->randomFloat(9,25,26),
+        'latitude' => $faker->randomFloat(9,65,66),
         'isValidate' => $faker->boolean(40),
         'user_id' => function () {
             return User::orderByRaw("RAND()")->first()->id;
