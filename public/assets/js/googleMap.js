@@ -121,10 +121,9 @@ function initMap() {
 	//End find path
 	
 	//Here is the manager to draw layer and things
-	var image = "uphill.png" ; //default image
+	var image = "assets/images/markers/uphill.png" ; //default image
 	var content= "Going uphill";
 	var title = "Uphill";
-	
 	
 	$(".icon").click(function(){
 		var source = $(this).attr('src');
@@ -133,73 +132,51 @@ function initMap() {
 		image = source;
 		closeNav();
 	});
-	
-	//##### drop a new marker on right click ######
-	google.maps.event.addListener(map, 'rightclick', function(event) {
-		var marker = new google.maps.Marker({
-			position: event.latLng, //map Coordinates where user right clicked
-			map: map,
-			draggable:true, //set marker draggable
-			animation: google.maps.Animation.DROP, //bounce animation
-			title:content,
-			icon: image //custom pin icon
-		});
+		
+		
+		$.get("/api/points/get", function (data) {
+				$(data).find("marker").each(function () {
+					var desc_val = $(this).parent().find('[name="description"]').val();
+					  
+					  var point 	= new google.maps.LatLng(parseFloat($(this).attr('lat')),parseFloat($(this).attr('lng')));
+					  create_marker(point, title, desc_val, false, false, false, image);
+				});
+			});	
+		
 		
 		//Content structure of info Window for the Markers
 		//next line is the get position
+		google.maps.event.addListener(map, 'rightclick', function(event) {
+		var EditForm = '<p><div class="marker-edit">'+
+				'<div class="marker-info-win">'+
+		'<div class="marker-inner-win"><span class="info-content">'+	
+		'<p id ="text" style="text-align:center">Description:</p>' +
+		'<input style="width: 150px" type="text" name="description" class="input" value="Write your description">' + 
+		'<br>' +'<input type="button" name="SubmitBtn" value="Submit" class="SubmitBtn">';
 		var post = event.latLng;
 		var lat = post.lat();
 		var lng = post.lng();
-		var rateValues;
 		
-		var image_array = ["bus.png","construct.png","deadend.png","dog.png","down.png","drunk.png",
-			"elevator.png","fire.png","help.png","hospital.png","narrow.png","parking.png",
-		"police.png","rock.png","shit.png","slippery.png","stair.png","up.png"];
+			create_marker(event.latLng, title,EditForm, true, true, image);
+		})
 		
-		var contentString = $('<div class="marker-info-win">'+
-		'<div class="marker-inner-win"><span class="info-content">'+
-		'<div style="text-align: center;">' + title + '</div>' +
-		'<br>'+
-		'<p id ="text" style="text-align:center">Description:</p>' +
-		'<input style="width: 150px" type="text" name="description" class="input" value="Write your description">' + 
-		'<br>' +
-		'<input type="button" name="submit" data-lng="'+lng+'" data-lat="'+lat+'" value="Submit" class="submit">' + '<br>' +
-		'<br /><button style="width: 100% ;margin-left:auto; margin-right:auto;" name="remove-marker" class="remove-marker" title="Remove Marker">Remove Marker</button></div></div>');
-		//Save value of input text and show on infoWindow, also delete both input field and submit button
-		var Submit 	= contentString.find('input.submit')[0];
-		google.maps.event.addDomListener(Submit, "click", function(event) {
-			var $this = $(this);
-			var latitude = $this.data('lat');
-			var longitude = $this.data('lng');
-			var desc_val = $this.parent().find('[name="description"]').val();
-			var tarr = image.split('/') ;
-			var file = tarr[tarr.length-1];
-			var image_type = image_array.indexOf(file);
-			console.log(image_type);
-			
-			 $.ajaxSetup({
-				headers:
-				{ 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+	function create_marker(MapPos, MapTitle, MapDesc, Ondrag, Removeable, Image_type){
+			var marker = new google.maps.Marker({
+			position: MapPos, //map Coordinates where user right clicked
+			map: map,
+			draggable:Ondrag, //set marker draggable
+			animation: google.maps.Animation.DROP, //bounce animation
+			title:content,
+			icon: image //custom pin icon
 			});
-
-			$.ajax({
-		        url: '/api/points/add',
-		        type: 'POST',    
-				dataType:JSON,
-		        data: {longitude:lng,latitude:lat,'description':desc_val,rateValue:rateValues,type:image_type},
-		        success: function(data){
-		        contentString.find('br').remove();
-				var x = contentString.find('input.input').val();
-				contentString.find('input.submit').remove();
-				contentString.find('input.input').remove();
-				contentString.find('#text').append('<br>' + x + '<br>');
-		        },
-		        error: function(e){
-		          console.log(e);
-		        }
-		});
 			
-		});
+			var contentString = $('<div class="marker-info-win">'+
+				'<div class="marker-inner-win"><span class="info-content">'+
+				'<h1 class="marker-heading">'+MapTitle+'</h1>'+
+				MapDesc+ 
+				'</span><button name="remove-marker" class="remove-marker" title="Remove Marker">Remove Marker</button>'+
+				'</div></div>');	
+				
 		//Create an infoWindow
 		var infowindow = new google.maps.InfoWindow();
 		
@@ -219,7 +196,54 @@ function initMap() {
 			marker.setMap(null);
 		});
 		
-	});
+		var SubmitBtn = contentString.find('input.SubmitBtn')[0];
+		
+		google.maps.event.addDomListener(SubmitBtn, "click", function(event) {
+		var $this = $(this);
+		var latitude = $this.data('lat');
+		var longitude = $this.data('lng');
+		var desc_val = $this.parent().find('[name="description"]').val();
+		var tarr = image.split('/') ; //get the name image
+		var file = tarr[tarr.length-1];
+		var marker_replaced = contentString.find('input.input').val();
+		
+		save_marker(marker, longitude, latitude, desc_val, file, marker_replaced);
+			
+		});
+	}
+	
+	//end create_marker
+	
+	function save_marker(Marker, longitude, latitude, description, Image_type, Replaced_data){
+		
+		var position = Marker.getPosition();
+		var lng = position.lng();
+		var lat = position.lat();
+		var myData = {longitude: lng, latitude:lat, description: description, type: Image_type };
+		console.log(Replaced_data);
+		
+		$.ajaxSetup({
+				headers:
+				{ 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+			});
+
+			$.ajax({
+		        url: '/api/points/add',
+		        type: 'POST',    
+		        data: myData,
+					success:function(data){
+					// need change on contentString
+					Marker.setDraggable(false);
+					
+            },
+            error:function (xhr, ajaxOptions, thrownError){
+                alert(thrownError); //throw any errors
+            }
+		});
+		
+	} //end save point
+	
+	
 	
 	
 	// Create the search box and link it to the UI element.

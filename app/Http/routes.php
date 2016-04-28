@@ -59,7 +59,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/api/points/get/{user}','PointController@getContribution')->middleware('auth');
     Route::get('/api/point/put/{id}','AdminController@putPoint')->middleware('admin');
     Route::get('/api/points/delete/{id}','PointController@deletePoint')->middleware('auth');
-    //Chat api
+    //Chat
     Route::get('/chatroom', 'ChatController@index');
     Route::post('chatroom/push', 'ChatController@push');
     Route::post('chatroom/report', 'ChatController@report');

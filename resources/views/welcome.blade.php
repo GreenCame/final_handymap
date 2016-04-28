@@ -21,41 +21,4 @@
         </a>
     </div>
 </div>
-
-
-<!-- Form Module-->
-<div id ="form" class="module form-module animated lightSpeedIn">
-    <div class="toggle">
-        <p>Don't have an account? Click here<p>
-
-    </div>
-    <div class="form">
-        <h2>Login to your account</h2>
-        <form>
-            <input type="text" placeholder="Username"/>
-            <input type="password" placeholder="Password"/>
-        </form>
-	  <span>
-	  <input type="checkbox" name="remember" value="remember" style="float:left;width:initial"/></span>
-        <p style="margin-left:20px">Remember me </p>
-
-        <button style="margin-top:10px">Login</button>
-        <div class="extra">
-            <div class="low">Forgot your password?</div>
-
-        </div>
-    </div>
-    <div class="form">
-        <h2>Create an account</h2>
-        <form>
-            <input type="text" placeholder="Username"/>
-            <input type="password" placeholder="Password"/>
-            <input type="password" placeholder="Re-type Password"/>
-            <input type="email" placeholder="Email Address"/>
-            <button>Register</button>
-        </form>
-    </div>
-
-
-</div>
 @endsection

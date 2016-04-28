@@ -81,13 +81,14 @@ class PointController extends Controller
 
     public function addPoints()
     {
+        $idType = DB::table("types")->where("picture", "=", $_POST['type'])->first()->id;
         $point = new Point();
         $point->user_id = Auth::user()->id;
         $point->longitude = Input::get("longitude");
         $point->latitude = Input::get("latitude");
         $point->rateValue = 0;
         $point->description = Input::get("description");
-        $point->type_id = $_POST["type"];
+        $point->type_id = $idType;
         $point->save();
     }
 

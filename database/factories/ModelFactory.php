@@ -48,7 +48,7 @@ $factory->defineAs(App\User::class, 'user', function (Faker\Generator $faker) {
         'lastname' => $faker->lastName,
         'warnings' => 0,
         'isVoice' => true,
-        'isAdmin' => true,
+        'isAdmin' => false,
         'isColor' => true,
         'isBlocked' => false,
         'password' => bcrypt("Password")
