@@ -37,6 +37,7 @@ body {
 }
 .typePointPicture{
     position: relative;
+    height: 75px;
 }
 .typePointPicture img{
     position: absolute;
@@ -44,5 +45,5 @@ body {
     width: auto;
     border-radius: 50%;
     margin-left: -80px;
-    margin-top: 8px;
+    margin-top: 2px;
 }
