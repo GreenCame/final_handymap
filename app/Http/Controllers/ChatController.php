@@ -13,6 +13,8 @@ use DateTime;
 use Input;
 use Pusher;
 use Auth;
+use App\User;
+use DB;
 
 class ChatController extends Controller
 {
@@ -28,7 +30,53 @@ class ChatController extends Controller
      */
     public function index()
     {
-        return view('chatroom');
+        $current_user_id=  Auth::user()->id;
+
+        $reported_chats = DB::table('report')->select('chat_id')->where('reporter_id', '=', $current_user_id)->get();
+
+        $reported_id = array();
+        foreach($reported_chats as $report)
+        {
+           $reported_id[] = $report->chat_id;
+        }
+
+        $chats = DB::table('chat')
+        ->whereNotIn('id', $reported_id)
+        ->orderBy('id', 'desc')
+        ->take(5)->get();
+        $items = [];
+        while(count($chats) > 0)
+        {
+            $chat = array_shift($chats);
+            $sender = User::find( $chat->sender_id);
+
+            $item = '<li class="media chatItem" data-id="'.$chat->id.'">
+
+                                        <div class="media-body">
+
+                                            <div class="media">
+                                                <a class="pull-left" href="#">
+                                                    <img height="40" width="40" class="media-object img-circle " src="assets/images/avatars/'.Auth::user()->avatar.'">
+                                                </a>
+                                                <div class="bubble me">
+                                                   '.$chat->content.'
+                                                    <br>
+                                                    <div style="color:coral;font-weight: bold;">
+													Sent by : '.$sender->pseudo;
+                                          if($chat->sender_id !== $current_user_id){
+                  $item .='<br><button type="button" class="reportBtn" data-id="'.$chat->id.'">Report</button>';
+                         }
+                          $item .=    '
+						  </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </li>';
+           $items[] = $item;
+        }
+		
+        return view('map')->with('chats', $items);
     }
 
     /**
@@ -89,14 +137,16 @@ class ChatController extends Controller
 
                                             <div class="media">
                                                 <a class="pull-left" href="#">
-                                                    <img height="60" width="60" class="media-object img-circle " src="assets/images/avatars/'.Auth::user()->avatar.'">
+                                                    <img height="40" width="40" class="media-object img-circle " src="assets/images/avatars/'.Auth::user()->avatar.'">
                                                 </a>
-                                                <div class="media-body">
+                                                <div class="bubble me">
                                                    '.$content.'
                                                     <br>
+													<div style="color:coral;font-weight: bold;">
                                                     Sent by : '.$sender.'
+													</div>
                                                     <button type="button" class="reportBtn" data-id="'.$chat->id.'">Report</button>
-                                                    <hr>
+                                                    
                                                 </div>
                                             </div>
 
@@ -106,10 +156,10 @@ class ChatController extends Controller
         $pusher = $this->getPusher();
         $pusher->trigger( 'test_channel',
                       'my_event', 
-                      array('message' =>  $new_item));
+                      array('message' =>  $new_item,'sender_id' => Auth::user()->id));
         
         $input = Input::all();
-
+       
         return response()->json(['message' => $content]);
 
     }
