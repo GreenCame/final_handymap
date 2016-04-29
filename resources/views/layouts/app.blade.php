@@ -23,24 +23,16 @@
 <body id="app-layout">
 <nav class="navbar navbar-default navbar-static-top">
     <div class="container">
-        <div class="navbar-header">
-
-            <!-- Collapsed Hamburger -->
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#app-navbar-collapse">
-                <span class="sr-only">Toggle Navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-
-            <!-- Branding Image -->
             <a class="navbar-brand" href="{{ url('/') }}" style="color:black">
                 <span class=" glyphicon glyphicon-map-marker" style="color:#EC8A0A"></span> HandyMap
             </a>
-        </div>
+			
+			<button id="start_button" onclick="startButton(event)">
+		    <img id="start_img" src="{{URL::asset('assets/images/markers/mic.gif')}}" alt="Start"></button>
+			<select id="select_language" class="controll" onchange="updateCountry()"></select>
+			&nbsp;&nbsp;
+			<select id="select_dialect" class="controll"></select>	
 
-        <div class="collapse navbar-collapse" id="app-navbar-collapse">
 
                <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
@@ -80,7 +72,7 @@
                         </li>
                     @endif
                 </ul>
-        </div>
+        
     </div>
 </nav>
 

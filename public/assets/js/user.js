@@ -28,7 +28,7 @@ new Vue({
                 removePoint: function() {
                     console.log("api/points/delete/" + this.point.id);
                     $.ajax({
-                        url: "../api/points/delete/" + this.point.id,
+                        url: "api/points/delete/" + this.point.id,
                         type: "GET",
                         success: function (data) {
                             console.log(data);

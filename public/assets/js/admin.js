@@ -156,11 +156,6 @@ function getPointsToConfirm() {
                 template: '#pointConfirm-template',
                 props: ["point"],
                 replace: false,
-                data: function(){
-                    return {
-                        isEditMode:false
-                    }
-                },
                 methods: {
                     removePoint: function() {
                         $.ajax({
@@ -172,9 +167,9 @@ function getPointsToConfirm() {
                         });
                         this.$dispatch("removePoint", this.point);
                     },
-                    savePoint: function () {
+                    putPoint: function(){
                         $.ajax({
-                            url: "api/point/put/"+this.point.id,
+                            url: "api/points/put/"+this.point.id,
                             type: "GET",
                             data: this.point,
                             success: function(data) {
@@ -183,18 +178,8 @@ function getPointsToConfirm() {
                         });
                     },
                     confirmPoint: function(){
-                        this.point.isValidate = true;
-                        this.savePoint();
+                        this.putPoint();
                         this.$dispatch("removePoint", this.point);
-                    },
-                    clicked: function(){
-                        if(this.isEditMode){
-                            this.isEditMode=false;
-                            this.savePoint();
-                        }
-                        else {
-                            this.isEditMode = true;
-                        }
                     }
                 },
                 computed: {
@@ -226,11 +211,6 @@ function getPoints() {
                 template: '#validatePoint-template',
                 props: ["point"],
                 replace: false,
-                data: function(){
-                    return {
-                        isEditMode:false
-                    }
-                },
                 methods: {
                     removePoint: function() {
                         $.ajax({
@@ -242,9 +222,9 @@ function getPoints() {
                         });
                         this.$dispatch("removePoint", this.point);
                     },
-                    savePoint: function () {
+                    putPoint: function(){
                         $.ajax({
-                            url: "api/point/put/"+this.point.id,
+                            url: "api/points/put/"+this.point.id,
                             type: "GET",
                             data: this.point,
                             success: function(data) {
@@ -252,19 +232,9 @@ function getPoints() {
                             }
                         });
                     },
-                    unValidatePoint: function(){
-                        this.point.isValidate = false;
-                        this.savePoint();
+                    confirmPoint: function(){
+                        this.putPoint();
                         this.$dispatch("removePoint", this.point);
-                    },
-                    clicked: function(){
-                        if(this.isEditMode){
-                            this.isEditMode=false;
-                            this.savePoint();
-                        }
-                        else {
-                            this.isEditMode = true;
-                        }
                     }
                 },
                 computed: {

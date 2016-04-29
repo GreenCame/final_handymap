@@ -12,8 +12,12 @@
                 RECENT CHAT HISTORY
             </div>
             <div class="panel-body">
-<ul class="media-list" id="contentList">
-        
+<ul class="media-list" id="contentList" style="max-height:400px;overflow: auto" data-user="{{ Auth::user()->id }}">
+         @if (count($chats) > 0)
+            @foreach ($chats as $chat)
+               {!!$chat!!}
+            @endforeach
+        @endif
 </ul>
             </div>
             <div class="panel-footer">

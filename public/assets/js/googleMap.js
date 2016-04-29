@@ -5,11 +5,21 @@ function initMap() {
 	var destination_place_id = null;
 	var centerMap = {lat: 65.00814, lng: 25.53012};
 	var travel_mode = google.maps.TravelMode.WALKING;
+	
 	var map = new google.maps.Map(document.getElementById('map'), {
 		center:centerMap,
-		zoom: 12,
-		streetViewControl: true
+		zoom: 15,
+		maxZoom: 16,
+		zoomControl: true,
+		zoomControlOptions: {
+		style: google.maps.ZoomControlStyle.DEFAULT,
+        position: google.maps.ControlPosition.BOTTOM_CENTER},
+		streetViewControl: true,
+		streetViewControlOptions: {
+		position: google.maps.ControlPosition.TOP_RIGHT}
+		//disableDefaultUI: true
 	});
+	
 	
 	var infoWindow = new google.maps.InfoWindow({map: map});
 	
@@ -27,7 +37,7 @@ function initMap() {
 			panorama = map.getStreetView();
 			panorama.setPosition(pos);
 			panorama.setPov(/** @type {google.maps.StreetViewPov} */({
-				heading: 265,
+				heading: 165,
 			pitch: 0}));
 			}, function () {
 			handleLocationError(true, infoWindow, map.getCenter());
@@ -120,29 +130,17 @@ function initMap() {
 	}
 	//End find path
 	
-	//Here is the manager to draw layer and things
-	var image = "assets/images/markers/uphill.png" ; //default image
-	var content= "Going uphill";
-	var title = "Uphill";
-	
-	$(".icon").click(function(){
-		var source = $(this).attr('src');
-		content = $(this).attr('alt');
-		title = $(this).attr('title');
-		image = source;
-		closeNav();
-	});
-		
-		
-		$.get("/api/points/get", function (data) {
+    
+			/*$.getJSON("/api/points/get", function (data) {
 				$(data).find("marker").each(function () {
 					var desc_val = $(this).parent().find('[name="description"]').val();
 					  
 					  var point 	= new google.maps.LatLng(parseFloat($(this).attr('lat')),parseFloat($(this).attr('lng')));
-					  create_marker(point, title, desc_val, false, false, false, image);
+					  console.log(point);
+					  create_marker(point, title, desc_val, false, false, image);
 				});
 			});	
-		
+		*/
 		
 		//Content structure of info Window for the Markers
 		//next line is the get position
@@ -152,14 +150,19 @@ function initMap() {
 		'<div class="marker-inner-win"><span class="info-content">'+	
 		'<p id ="text" style="text-align:center">Description:</p>' +
 		'<input style="width: 150px" type="text" name="description" class="input" value="Write your description">' + 
-		'<br>' +'<input type="button" name="SubmitBtn" value="Submit" class="SubmitBtn">';
+		'<br>' +'<input type="button" name="SubmitBtn" value="Submit" class="SubmitBtn">'+'<br>';
 		var post = event.latLng;
 		var lat = post.lat();
 		var lng = post.lng();
 		
 			create_marker(event.latLng, title,EditForm, true, true, image);
 		})
-		
+		var contentString = $('<div class="marker-info-win">'+
+				'<div class="marker-inner-win"><span class="info-content">'+
+				'<h2 class="marker-heading" style="text-align: center">'+title+'</h2>'+
+				 +'<br>'+
+				'</span><button name="remove-marker" class="remove-marker" title="Remove Marker">Remove Marker</button>'+
+				'</div></div>');
 	function create_marker(MapPos, MapTitle, MapDesc, Ondrag, Removeable, Image_type){
 			var marker = new google.maps.Marker({
 			position: MapPos, //map Coordinates where user right clicked
@@ -167,7 +170,7 @@ function initMap() {
 			draggable:Ondrag, //set marker draggable
 			animation: google.maps.Animation.DROP, //bounce animation
 			title:content,
-			icon: image //custom pin icon
+			icon	: image //custom pin icon
 			});
 			
 			var contentString = $('<div class="marker-info-win">'+
@@ -205,9 +208,14 @@ function initMap() {
 		var desc_val = $this.parent().find('[name="description"]').val();
 		var tarr = image.split('/') ; //get the name image
 		var file = tarr[tarr.length-1];
-		var marker_replaced = contentString.find('input.input').val();
-		
+		var x = contentString.find('input.input').val();
+				contentString.find('input.SubmitBtn').remove();
+				contentString.find('input.input').remove();
+				contentString.find('button.remove-marker').remove();
+				contentString.find('#text').append('<br>' + x + '<br>');
+				var marker_replaced =x;
 		save_marker(marker, longitude, latitude, desc_val, file, marker_replaced);
+		infowindow.close();
 			
 		});
 	}
@@ -220,7 +228,6 @@ function initMap() {
 		var lng = position.lng();
 		var lat = position.lat();
 		var myData = {longitude: lng, latitude:lat, description: description, type: Image_type };
-		console.log(Replaced_data);
 		
 		$.ajaxSetup({
 				headers:
@@ -232,9 +239,8 @@ function initMap() {
 		        type: 'POST',    
 		        data: myData,
 					success:function(data){
-					// need change on contentString
 					Marker.setDraggable(false);
-					
+					alert("Successfully saved");
             },
             error:function (xhr, ajaxOptions, thrownError){
                 alert(thrownError); //throw any errors
@@ -244,8 +250,153 @@ function initMap() {
 	} //end save point
 	
 	
+	//Here is the manager to draw layer and things
+	var image = "assets/images/markers/up.png" ; //default image
+	var content= "Going uphill";
+	var title = "Uphill";
+	//##### menu for icon //
+  var active1 = false;
+  var active2 = false;
+  var active3 = false;
+  var active4 = false;
+  var active5 = false;
+  var active6 = false;
+  var active7 = false;
+  var active8 = false;
+  var active9 = false;
+  var active10 = false;
+  var active11 = false;
+  var active12 = false;
+  var active13 = false;
+  var active14 = false;
+  var active15 = false;
+  var active16 = false;
+  var active17 = false;
+  var active18 = false;
+
+    $('.parent').on('click', function() {
+    
+    if (!active1) $(this).find('.iconChoose1').css({'background-color': ' #d9d9d9', 'transform': 'translate(-25px,85px)'});
+    else $(this).find('.iconChoose1').css({'background-color': 'white', 'transform': 'none'}); 
+     if (!active2) $(this).find('.iconChoose2').css({'background-color': ' #d9d9d9', 'transform': 'translate(-25px,130px)'});
+    else $(this).find('.iconChoose2').css({'background-color': 'white', 'transform': 'none'});
+      if (!active3) $(this).find('.iconChoose3').css({'background-color': ' #d9d9d9', 'transform': 'translate(-25px,175px)'});
+    else $(this).find('.iconChoose3').css({'background-color': 'white', 'transform': 'none'});
+      if (!active4) $(this).find('.iconChoose4').css({'background-color': ' #d9d9d9', 'transform': 'translate(-25px,220px)'});
+    else $(this).find('.iconChoose4').css({'background-color': 'white', 'transform': 'none'});
+	 if (!active5) $(this).find('.iconChoose5').css({'background-color': ' #d9d9d9', 'transform': 'translate(-25px,265px)'});
+    else $(this).find('.iconChoose5').css({'background-color': 'white', 'transform': 'none'});
+	 if (!active6) $(this).find('.iconChoose6').css({'background-color': ' #d9d9d9', 'transform': 'translate(-25px,310px)'});
+    else $(this).find('.iconChoose6').css({'background-color': 'white', 'transform': 'none'});
+	 if (!active7) $(this).find('.iconChoose7').css({'background-color': ' #d9d9d9', 'transform': 'translate(-25px,355px)'});
+    else $(this).find('.iconChoose7').css({'background-color': 'white', 'transform': 'none'});
+	 if (!active8) $(this).find('.iconChoose8').css({'background-color': ' #d9d9d9', 'transform': 'translate(-25px,400px)'});
+    else $(this).find('.iconChoose8').css({'background-color': 'white', 'transform': 'none'});
+	 if (!active8) $(this).find('.iconChoose9').css({'background-color': ' #d9d9d9', 'transform': 'translate(-25px,445px)'});
+    else $(this).find('.iconChoose9').css({'background-color': 'white', 'transform': 'none'});
+	 if (!active8) $(this).find('.iconChoose10').css({'background-color': ' #d9d9d9', 'transform': 'translate(90px,0px)'});
+    else $(this).find('.iconChoose10').css({'background-color': 'white', 'transform': 'none'});
+	 if (!active8) $(this).find('.iconChoose11').css({'background-color': ' #d9d9d9', 'transform': 'translate(135px,0px)'});
+    else $(this).find('.iconChoose11').css({'background-color': 'white', 'transform': 'none'});
+	 if (!active8) $(this).find('.iconChoose12').css({'background-color': ' #d9d9d9', 'transform': 'translate(180px,0px)'});
+    else $(this).find('.iconChoose12').css({'background-color': 'white', 'transform': 'none'});
+	 if (!active8) $(this).find('.iconChoose13').css({'background-color': ' #d9d9d9', 'transform': 'translate(225px,0px)'});
+    else $(this).find('.iconChoose13').css({'background-color': 'white', 'transform': 'none'});
+	if (!active8) $(this).find('.iconChoose14').css({'background-color': ' #d9d9d9', 'transform': 'translate(270px,0px)'});
+    else $(this).find('.iconChoose14').css({'background-color': 'white', 'transform': 'none'});
+	if (!active8) $(this).find('.iconChoose15').css({'background-color': ' #d9d9d9', 'transform': 'translate(315px,0px)'});
+    else $(this).find('.iconChoose15').css({'background-color': 'white', 'transform': 'none'});
+	if (!active8) $(this).find('.iconChoose16').css({'background-color': ' #d9d9d9', 'transform': 'translate(360px,0px)'});
+    else $(this).find('.iconChoose16').css({'background-color': 'white', 'transform': 'none'});
+	if (!active8) $(this).find('.iconChoose17').css({'background-color': ' #d9d9d9', 'transform': 'translate(405px,0px)'});
+    else $(this).find('.iconChoose17').css({'background-color': 'white', 'transform': 'none'});
+	if (!active8) $(this).find('.iconChoose18').css({'background-color': ' #d9d9d9', 'transform': 'translate(450px,0px)'});
+    else $(this).find('.iconChoose18').css({'background-color': 'white', 'transform': 'none'});
 	
+    active1 = !active1;
+    active2 = !active2;
+    active3 = !active3;
+    active4 = !active4;
+	active5 = !active5;
+    active6 = !active6;
+    active7 = !active7;
+    active8 = !active8;
+	active9 = !active9;
+	active10 = !active10;
+	active11 = !active11;
+	active12 = !active12;
+	active13 = !active13;
+	active14 = !active14;
+	active15 = !active15;
+	active16 = !active16;
+	active17 = !active17;
+	active18 = !active18;
+      
+    });
 	
+	//####show chat box
+	$("#chat").on("click",function(){
+		$(".forms").toggle();
+		
+	});
+	
+	$(".icon").click(function(){
+		var source = $(this).attr('src');
+		content = $(this).attr('alt');
+		title = $(this).attr('title');
+		image = source;
+		$(".main").attr('src', source);
+		
+	});
+
+var image_array = ["assets/images/markers/bus.png","assets/images/markers/construct.png","assets/images/markers/deadend.png","assets/images/markers/dog.png","assets/images/markers/down.png","assets/images/markers/drunk.png",
+			"assets/images/markers/elevator.png","assets/images/markers/fire.png","assets/images/markers/help.png","assets/images/markers/hospital.png","assets/images/markers/narrow.png","assets/images/markers/parking.png",
+		"assets/images/markers/police.png","assets/images/markers/rock.png","assets/images/markers/shit.png","assets/images/markers/slippery.png","assets/images/markers/stair.png","assets/images/markers/up.png"];
+	
+	var json = [{"id":48,"title":"Aperiam saepe iusto quaerat et accusantium. Saepe","longitude":"25.130041155","latitude":"65.621770916"},
+				{"id":46,"title":"Quis animi deleniti exercitationem exercitationem ","longitude":"25.534386605","latitude":"65.25616832"},
+				{"id":48,"title":"Helgelandskysten","longitude":"25.982207233","latitude":"65.092197307"},
+				{"id":48,"title":"Cum et nesciunt sit fugiat voluptate quae. Volupta","longitude":"25.168638629","latitude":"65.786251736"},
+				{"id":48,"title":"Sunt accusamus rerum maxime quia sed et eos sunt","longitude":"25.826751635","latitude":"65.779081106"},
+				{"id":48,"title":"Et consequuntur est animi est enim id. Mollitia qu","longitude":"25.347448941","latitude":"65.548790617"},
+				{"id":48,"title":"Illum modi odit a quia et. Sapiente architecto mol","longitude":"25.168638629","latitude":"65.092197307"},
+				{"id":48,"title":"Nulla commodi unde at reprehenderit aspernatur qui","longitude":"25.982207233","latitude":"65.786251736"},
+				{"id":48,"title":"Distinctio ipsum omnis quasi a ea facere repella","longitude":"25.826751635","latitude":"65.779081106"},
+				{"id":48,"title":"Debitis dolores illo ut corporis consequatur volup..","longitude":"25.347448941","latitude":"65.548790617"},
+				{"id":48,"title":"Distinctio animi veniam rem odit. Earum libero fac","longitude":"25.746523764","latitude":"65.789658828"},
+				{"id":48,"title":"Qui id cum vel dicta sed iure voluptatem deleniti","longitude":"25.534386605","latitude":"65.25616832"},
+				{"id":48,"title":"Rerum adipisci ut beatae ut id. Enim impedit conse","longitude":"25.46776445","latitude":"65.939365596"},
+				{"id":48,"title":"Hic quia sit aliquam placeat ut qui. Ut sequi nihi.","longitude":"25.31013199","latitude":"65.850412571"},
+				{"id":48,"title":"Et velit repellat quos dicta quia dicta. Animi vel.","longitude":"25.751744969","latitude":"65.270542465"}
+				
+				 
+				];
+				
+
+	for(var i = 0; i < json.length; i++) {
+    
+    // Current object
+    var obj = json[i];
+	var marker = new google.maps.Marker({
+      position: new google.maps.LatLng(obj.latitude,obj.longitude),
+      map: map,
+	  title: obj.title,
+	  icon: image_array[i]
+    });
+	var clicker = addClicker(marker,obj.title);
+     // create_marker(json[i].latLng,"test","loz",false,false,image );
+
+
+}
+	function addClicker(marker, content) {
+    google.maps.event.addListener(marker, 'click', function() {
+      var infowindow = new google.maps.InfoWindow({map: map});
+      if (infowindow) {infowindow.close();}
+      infowindow = new google.maps.InfoWindow({content: content});
+      infowindow.open(map, marker);
+      
+    });
+  }
 	// Create the search box and link it to the UI element.
 	var input = document.getElementById('pac-input');
 	var searchBox = new google.maps.places.SearchBox(input);
@@ -333,27 +484,13 @@ function toggleStreetView() {
 	var toggle = panorama.getVisible();
 	if (toggle == false) {
 		panorama.setVisible(true);
+		
 		} else {
 		panorama.setVisible(false);
+		
 	}
 }
-//Open left nav//
-function openNav() {
-	document.getElementById("mysidenavl").style.width = "300px";
-}
 
-/* Set the width of the side navigation to 0 */
-function closeNav() {
-	document.getElementById("mysidenavl").style.width = "0";
-}
-//Open Right nav//
-function openNavr() {
-	document.getElementById("mySidenavr").style.width = "250px";
-}
-
-function closeNavr() {
-	document.getElementById("mySidenavr").style.width = "0";
-}
 
 // Voice regconition
 

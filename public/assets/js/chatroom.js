@@ -16,7 +16,7 @@ $( document ).ready(function() {
       }
 
        $.ajax({
-        url: 'chatroom/push',
+        url: '/push',
         type: 'POST',
         dataType: 'text',
         data: {content:text},
@@ -33,7 +33,7 @@ $( document ).ready(function() {
        var $btn = $(this);
        var chat_id = $btn.data('id');  
        $.ajax({
-        url: 'chatroom/report',
+        url: '/report',
         type: 'POST',
         dataType: 'text',
         data: {chat_id:chat_id},
@@ -51,7 +51,15 @@ $( document ).ready(function() {
    console.log(channel);
 
   channel.bind('my_event', function(data) {
-      $('#contentList').append(data.message);
+      $('#contentList').prepend(data.message);
+      $("#contentList").animate({scrollTop:0});
+      var user_id = $('#contentList').data('user');
+
+      if(data.sender_id === user_id)
+      {
+        $('#contentList').find('li:first').find('button').remove();
+              }
+
 	});
 
    channel.bind('remove_chat', function(data) {
